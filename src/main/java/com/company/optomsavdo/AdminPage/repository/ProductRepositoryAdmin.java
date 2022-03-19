@@ -23,7 +23,7 @@ public interface ProductRepositoryAdmin extends CrudRepository<ProductEntityAdmi
 
     @Modifying
     @Transactional
-    @Query("  delete  from ProductEntityAdmin  a  where a.p_name=?1 ")
+    @Query(" delete  from ProductEntityAdmin  a  where a.p_name=?1 ")
     void ByNameDelete(String name);
 
 

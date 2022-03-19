@@ -2,6 +2,8 @@ package com.company.optomsavdo.telegramBot.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -19,7 +21,8 @@ public class ProductEntity {
     private String p_price;
     @JoinColumn(name = "img")
     private String img;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "menu_id")
     private MenuEntity menu;
 

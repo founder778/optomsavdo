@@ -13,11 +13,11 @@ import com.company.optomsavdo.telegramBot.repository.OrderRepository;
 import com.company.optomsavdo.telegramBot.repository.ProductRepository;
 import com.company.optomsavdo.telegramBot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -74,6 +74,26 @@ public class ProductControllerAdmin {
 
         productService.saveFile(photo, name.toLowerCase());
         return "redirect:/admin/home";
+    }
+
+    @GetMapping("")
+    public String home() {
+        return "Auth";
+
+    }
+    @PostMapping("/check")
+    public String check(@RequestParam("login") String login,
+                        @RequestParam("parol") Integer parol, RedirectAttributes mas){
+        if(login.equalsIgnoreCase("AdminOptom") && parol == 77777){
+            return "redirect:/admin/home";
+        }
+        else if(login.equalsIgnoreCase("AdminOptom2") && parol == 77777){
+            return "redirect:/admin/home2";
+        }
+        mas.addFlashAttribute("messages","not found");
+
+        return "Auth";
+
     }
 
     @GetMapping("/home")
@@ -164,19 +184,19 @@ public class ProductControllerAdmin {
 
 
     @GetMapping("/Allusers")
-    public String Allusers(Model model){
+    public String Allusers(Model model) {
         List<UserEntity> allUsers = userRepository.getAllUsers();
-        model.addAttribute("users",allUsers);
+        model.addAttribute("users", allUsers);
         return "AllUsers";
     }
 
     @GetMapping("/status/{id}/{status}")
     public String updateStatus(@PathVariable("id") Integer id,
-                               @PathVariable("status") String status){
-        if(status.equals("ACTIVE")){
-            userRepository.update("BLOCK",id);
-        }else {
-            userRepository.update("ACTIVE",id);
+                               @PathVariable("status") String status) {
+        if (status.equals("ACTIVE")) {
+            userRepository.update("BLOCK", id);
+        } else {
+            userRepository.update("ACTIVE", id);
         }
 
         return "redirect:/admin/Allusers";
@@ -184,14 +204,15 @@ public class ProductControllerAdmin {
 
     @GetMapping("/editUser/{id}")
     public String updateUser(@PathVariable("id") Integer id,
-                             Model model){
+                             Model model) {
         Optional<UserEntity> user = userRepository.findById(id);
-        model.addAttribute("user",user.get());
+        model.addAttribute("user", user.get());
         return "User";
 
     }
+
     @PostMapping("/saveUser")
-    public String saveUser(UserEntity user){
+    public String saveUser(UserEntity user) {
         Optional<UserEntity> respons = userRepository.findById(user.getA_id());
         respons.get().setA_login(user.getA_login());
         respons.get().setA_password(user.getA_password());
@@ -200,5 +221,93 @@ public class ProductControllerAdmin {
 
     }
 
+
+
+//    =============================admin 2================
+
+    @GetMapping("/home2")
+    public String newCreate2(Model model1, Model model2) {
+        List<MenuEntityAdmin> menu = menuRepositoryAdmin.getAll();
+        model1.addAttribute("menus", menu);
+        List<String> type = productRepositoryAdmin.getAll();
+        model2.addAttribute("types", type);
+        return "Agent2";
+    }
+
+    @GetMapping("/products2")
+    public String products2(Model model1) {
+        List<ProductEntityAdmin> products = productRepositoryAdmin.AllProducts();
+        model1.addAttribute("pro", products);
+        return "Products2";
+    }
+
+    @PostMapping("/img2")
+    public String ImgUpdate2(@RequestParam("photo") MultipartFile photo,
+                            @RequestParam("name") String name) {
+
+        productService.saveFile(photo, name.toLowerCase());
+        return "redirect:/admin/home2";
+    }
+
+    @GetMapping("/orderByDay2")
+    public String orderByDate2(Model model) {
+        List<String> users = userRepository.getAll();
+        model.addAttribute("users", users);
+        return "ByDay";
+    }
+
+    @PostMapping("/upload2")
+    public String fileUpload2(@RequestParam("photo") MultipartFile photo,
+                             @RequestParam("name") String name,
+                             @RequestParam("menu") String menu,
+                             @RequestParam("type") String type,
+                             @RequestParam("price") String price,
+                             @RequestParam("caption") String caption) {
+        ProductDto product = new ProductDto();
+        product.setImg(photo);
+        product.setP_name(name);
+        product.setMenu(menu);
+        product.setP_type(type);
+        product.setP_price(price);
+        product.setP_caption(caption);
+        productService.create(product);
+
+        return "redirect:/admin/home2";
+    }
+
+    @GetMapping("/delete2/{name}")
+    public String delete2(@PathVariable("name") String name) {
+        productRepositoryAdmin.ByNameDelete(name);
+        return "redirect:/admin/products2";
+    }
+
+    @GetMapping("/edit2/{name}")
+    public String proUpdate2(@PathVariable("name") String name, Model model1) {
+        ProductEntity product = productRepository.getProduct(name);
+        model1.addAttribute("pro", product);
+        return "UpdateProduct2";
+    }
+    @PostMapping("/save2")
+    public String save2(ProductEntity products) {
+        ProductEntity product = productRepository.getProduct(products.getP_name());
+        product.setP_caption(products.getP_caption());
+        product.setP_price(products.getP_price());
+        productRepository.save(product);
+        return "redirect:/admin/products2";
+    }
+    @GetMapping("/getorder2/{name}")
+    public String getOrder2(@PathVariable("name") String name, Model model) {
+        Integer userId = userRepository.getuserbyid(name);
+        List<OrderEntity> order = orderRepository.getOrder(userId, String.valueOf(LocalDate.now()));
+        model.addAttribute("orders", order);
+        return "OrderA2";
+    }
+
+    @GetMapping("/imgUpdate2")
+    public String updateImg2(Model model) {
+        List<ProductEntityAdmin> product = productRepositoryAdmin.AllProducts();
+        model.addAttribute("product", product);
+        return "imgUpdate2";
+    }
 
 }

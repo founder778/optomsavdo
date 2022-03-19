@@ -35,6 +35,13 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Integer> {
     @Query("select o from OrderEntity o where o.user.a_id = ?2 and o.date=?1")
     List<OrderEntity> getOrders(String date,Integer userId);
 
+    @Modifying
+    @Transactional
+    @Query("update OrderEntity o set o.status = 'READY' where o.user.a_id=?1 and o.status ='ACTIVE'")
+    void update2(Integer userId);
+
+
+
 
 
 

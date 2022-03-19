@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.css"></script>
+    <link th:href="@{/style/HomePage.css}" rel="stylesheet" >
+    <title>Region</title>
+</head>
+<body>
+<header>
+    <div class="marketlogo">
+        <div class="homelogo"></div>
+        <a href="#" class="logo">OptomSavdo.</a>
+    </div>
+
+    <nav class="navbar">
+
+        <a class="active" th:href="@{/admin/home2}">Mahsulot qo`shish</a>
+        <a th:href="@{/admin/products2}">Mahsulotlar</a>
+        <a th:href="@{/admin/orderByDay2}">Bugungi zakazlar</a>
+        <a th:href="@{/admin/imgUpdate2}">Rasm almashtirish</a>
+
+    </nav>
+
+</header>
+<div class="contentinfo" style="margin-top: 100px">
+    <div class="info">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th class="table-sub-heading-color">Nomi</th>
+                <th>Tipi</th>
+                <th>Narxi</th>
+                <th>Malumot</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="product : ${pro}">
+                <tr>
+                    <td>[[${product.p_name}]]</td>
+                    <td>[[${product.p_type}]]</td>
+                    <td>[[${product.p_price}]]</td>
+                    <td>[[${product.p_caption}]]</td>
+                    <td><a class="h4 mr-3" th:href="@{'/admin/delete2/' + ${product.p_name}}" >Delete</a></td>
+                    <td><a class="h4 mr-3" th:href="@{'/admin/edit2/' + ${product.p_name}}" >Update</a></td>
+                </tr>
+            </th:block>
+
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

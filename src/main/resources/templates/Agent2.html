@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.css"></script>
+    <link th:href="@{/style/HomePage.css}" rel="stylesheet" >
+    <title>Region</title>
+</head>
+<body>
+<header>
+    <div class="marketlogo">
+        <div class="homelogo"></div>
+        <a href="#" class="logo">OptomSavdo.</a>
+    </div>
+
+    <nav class="navbar">
+
+        <a class="active" th:href="@{/admin/home2}">Mahsulot qo`shish</a>
+        <a th:href="@{/admin/products2}">Mahsulotlar</a>
+        <a th:href="@{/admin/orderByDay2}">Bugungi zakazlar</a>
+        <a th:href="@{/admin/imgUpdate2}">Rasm almashtirish</a>
+
+    </nav>
+
+</header>
+<div class="container" style="margin-top: 100px; height: 100%; width: 100%; display: flex">
+    <div class="row" style="border: 1px darkgrey solid;border-radius: 10px; width: 50%;
+    margin: 100px 0 0 10px;background-color: black">
+        <div class="col-sm-12">
+
+            <form th:action="@{/admin/upload2}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label style="color: azure">photo</label>
+                    <input type="file"
+                           class="form-control" name="photo" placeholder="enter photo">
+                </div>
+                <div class="form-group">
+                    <label style="color: azure">name</label>
+                    <input type="text"
+                           class="form-control" name="name" placeholder="enter name">
+                </div>
+                <div class="form-group">
+                    <label style="color: azure">menu</label>
+                    <input type="text"
+                           class="form-control" name="menu" placeholder="enter menu">
+                </div>
+                <div class="form-group">
+                    <label style="color: azure">type</label>
+                    <input type="text"
+                           class="form-control" name="type" placeholder="enter type">
+                </div>
+                <div class="form-group">
+                    <label style="color: azure">price</label>
+                    <input type="text"
+                           class="form-control" name="price" placeholder="enter price">
+                </div>
+                <div class="form-group">
+                    <label style="color: azure">caption</label>
+                    <input type="text"
+                           class="form-control" name="caption" placeholder="enter caption">
+                </div>
+                <div class="button">
+                    <input style="background-color: blue" type="submit" value="Registr">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="contentinfo" style="display: flex;margin-top: 100px">
+
+        <div class="info" style="width: 300px;margin-right: 20px" >
+            <p>Menu</p>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th class="table-sub-heading-color">Nomi</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="menu : ${menus}">
+                    <tr>
+                        <td>[[${menu.m_name}]]</td>
+                    </tr>
+                </th:block>
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="info" style="width: 300px">
+            <p>Mahsulot tiplari</p>
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Tipi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="type : ${types}">
+                    <tr>
+                        <td>[[${type}]]</td>
+                    </tr>
+                </th:block>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

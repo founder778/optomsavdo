@@ -34,7 +34,7 @@ public class UserController {
         switch (step) {
             case "name": {
                 userStep.replace(userId, "surname");
-                sendMessage.setText("*Familyangizni kiriting : *");
+                sendMessage.setText("*Ismingizni kiriting : *");
                 sendMessage.setParseMode("Markdown");
 
                 sendMessage.setChatId(userId);
@@ -67,7 +67,7 @@ public class UserController {
                 return sendMessage;
             }
             case "Login": {
-                sendMessage.setText("*parolingizni  kiriting : *");
+                sendMessage.setText("*Parolingizni  kiriting : *");
                 sendMessage.setParseMode("Markdown");
 
 

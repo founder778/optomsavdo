@@ -1,6 +1,7 @@
 package com.company.optomsavdo.telegramBot;
 
 import com.company.optomsavdo.telegramBot.controller.UserController;
+import com.company.optomsavdo.telegramBot.repository.OrderRepository;
 import com.company.optomsavdo.telegramBot.service.ButtonService;
 import com.company.optomsavdo.telegramBot.service.OrderService;
 import com.company.optomsavdo.telegramBot.service.ProductService;
@@ -47,6 +48,8 @@ public class Start extends TelegramLongPollingBot {
     ButtonService buttonService;
     @Autowired
     OrderService orderService;
+    @Autowired
+    OrderRepository orderRepository;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -69,30 +72,33 @@ public class Start extends TelegramLongPollingBot {
                     }
                     state.put(userId, UserState.created);
                     userStep.put(userId, "name");
-                    sendMessage.setText("*Botga xush kelibsiz ismingizni kiriting*");
+                    sendMessage.setText("*Botga xush kelibsiz DO`KON NOMINI kiriting*");
                     sendMessage.setParseMode("Markdown");
                     sendMessage.setChatId(userId);
                     sendMes(sendMessage);
                     return;
                 }
             }
-            if (state.get(userId).equals(UserState.created)) {
-                sendMes(userController.createUser(userId, message, userStep, newUser));
-                if (userStep.get(userId).equals("/start")) {
-                    sendMessage.setChatId("868795543");
-                    String[] userSplit = newUser.get(userId).split("#");
-                    sendMessage.setText("Ismi" + userSplit[0] + "\n" +
-                            "Yangi agent ish boshlashiga ruhsat berilsinmi");
-                    sendMessage.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Ruxsat berish", "Ruxsat" + userId)))));
-                    newUser.replace(userId, "admin");
-                    sendMes(sendMessage);
-                }
-                return;
-            } else if (state.get(userId).equals(UserState.worker)) {
-                sendMes(userController.isExistUser(message, userId, userStep, signUp, state));
+            if(state.containsKey(userId)){
+                if ( state.get(userId).equals(UserState.created)) {
+                    sendMes(userController.createUser(userId, message, userStep, newUser));
+                    if (userStep.get(userId).equals("/start")) {
+                        sendMessage.setChatId("868795543");
+                        String[] userSplit = newUser.get(userId).split("#");
+                        sendMessage.setText("Ismi" + userSplit[0] + "\n" +
+                                "Yangi agent ish boshlashiga ruhsat berilsinmi");
+                        sendMessage.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Ruxsat berish", "Ruxsat" + userId)))));
+                        newUser.replace(userId, "admin");
+                        sendMes(sendMessage);
+                    }
+                    return;
+                } else if (state.get(userId).equals(UserState.worker)) {
+                    sendMes(userController.isExistUser(message, userId, userStep, signUp, state));
 
-                return;
-//            } else if (message.equals("📦 zakazlarim")) {
+                    return;
+                }
+            }
+//            else if (message.equals("📦 zakazlarim")) {
 //                if (!korzina.containsKey(userId)) {
 //                    sendMessage.setText("*zakazlar yo`q*");
 //                    sendMessage.setParseMode("Markdown");
@@ -128,20 +134,23 @@ public class Start extends TelegramLongPollingBot {
 //
 //                }
 
-            } else if ((message.equals("📋 zakaz berish"))) {
+//            }
+             if ((message.equals("📋 zakaz berish"))) {
                 sendMessage.setText("*Menu bo`limi*");
                 sendMessage.setParseMode("Markdown");
                 sendMessage.setChatId(userId);
                 sendMessage.setReplyMarkup(buttonService.menuButton(buttonService.getAll()));
                 userStep.replace(userId, "menu");
+
                 sendMes(sendMessage);
                 return;
-            } else if (message.equals("✅ Barchasini tasdiqlash")) {
-                if(orderService.create(korzina.get(userId),userId)){
+            }  if (message.equals("✅ Barchasini tasdiqlash")) {
+                if (orderService.create(korzina.get(userId), userId)) {
                     sendMes(orderService.getAllzakazlar(userId));
-                    sendMes(orderService.retunAdmin(userId));
-                    korzina.remove(userId);
+                    userStep.replace(userId,"active");
+
                 }
+
                 else {
                     sendMessage.setText("Hech narsa zakaz qilinmadi");
                     sendMessage.setChatId(userId);
@@ -149,18 +158,27 @@ public class Start extends TelegramLongPollingBot {
                 }
 
                 return;
+            } else if (message.equals("📂 Zakazlar tarixi")) {
+                sendMes(orderService.groupByDate(userId, userStep));
+                return;
             }
-            else if(message.equals("📂 Zakazlar tarixi")){
-             sendMes(orderService.groupByDate(userId,userStep));
-             return;
-            }
-
 
 
         } else if (update.hasCallbackQuery()) {
             String userid = update.getCallbackQuery().getFrom().getId().toString();
             String data = update.getCallbackQuery().getData();
             String chatId = update.getCallbackQuery().getMessage().getMessageId().toString();
+          if(data.startsWith("tay")){
+              EditMessageText editMessageText1 = new EditMessageText();
+              String s = data.substring(3);
+              orderRepository.update2(Integer.parseInt(s));
+              editMessageText1.setText("Qabul qilindi");
+              editMessageText1.setChatId("868795543");
+              editMessageText1.setMessageId(Integer.valueOf(chatId));
+              editMes(editMessageText1);
+              return;
+
+          }
             if (data.startsWith("Ruxsat")) {
                 sendMes(userService.update(data.substring(6)));
                 return;
@@ -198,9 +216,19 @@ public class Start extends TelegramLongPollingBot {
                 return;
             }
             if (data.startsWith("back")) {
-                sendMes(productService.getProductTypee(userStep,olddata.get(userid).split("#")[0], userid));
+                sendMes(productService.getProductTypee(userStep, olddata.get(userid).split("#")[0], userid));
                 return;
 
+            }
+            if(userStep.get(userid).equals("active") && data.equals("active")){
+                sendMes(orderService.retunAdmin(userid));
+                EditMessageText sendMessage1 = new EditMessageText();
+                sendMessage1.setChatId(userid);
+                sendMessage1.setText("barchasi tasdiqlandi");
+                sendMessage1.setMessageId(Integer.valueOf(chatId));
+                editMes(sendMessage1);
+                korzina.remove(userid);
+                return;
             }
 //            if (userStep.get(userid).equals("zakaz") && data.startsWith("ok")) {
 //
@@ -240,15 +268,14 @@ public class Start extends TelegramLongPollingBot {
 //            }
 
 
-
             if (userStep.get(userid).equals("zakaz") && data.startsWith("ok")) {
                 EditMessageReplyMarkup replyMarkup = new EditMessageReplyMarkup();
                 String[] split = data.split("/");
                 if (!korzina.containsKey(userid)) {
                     korzina.put(userid, split[1] + "/" + split[2]);
-                  replyMarkup.setMessageId(Integer.valueOf(chatId));
-                  replyMarkup.setChatId(userid);
-                  replyMarkup.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Boshqa "+olddata.get(userid).split("#")[0],"back/"+olddata.get(userid).split("#")[0])))));
+                    replyMarkup.setMessageId(Integer.valueOf(chatId));
+                    replyMarkup.setChatId(userid);
+                    replyMarkup.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Boshqa " + olddata.get(userid).split("#")[0], "back/" + olddata.get(userid).split("#")[0])))));
                     productCount.replace(userid, 0);
                     replayM(replyMarkup);
                     return;
@@ -256,7 +283,7 @@ public class Start extends TelegramLongPollingBot {
                 korzina.replace(userid, korzina.get(userid) + "=" + split[1] + "/" + split[2]);
                 replyMarkup.setMessageId(Integer.valueOf(chatId));
                 replyMarkup.setChatId(userid);
-                replyMarkup.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Boshqa "+olddata.get(userid).split("#")[0],"back/"+olddata.get(userid).split("#")[0])))));
+                replyMarkup.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Boshqa " + olddata.get(userid).split("#")[0], "back/" + olddata.get(userid).split("#")[0])))));
                 productCount.replace(userid, 0);
                 replayM(replyMarkup);
                 productCount.replace(userid, 0);
@@ -274,11 +301,11 @@ public class Start extends TelegramLongPollingBot {
 //                return;
 //            }
 
-            if(userStep.get(userid).equals("istoriya")){
-                editMes(orderService.retunByDate(data,userStep,userid,chatId));
+            if (userStep.get(userid).equals("istoriya")) {
+                editMes(orderService.retunByDate(data, userStep, userid, chatId));
                 return;
             }
-            if(data.equals("menu")){
+            if (data.equals("menu")) {
                 editMessageText.setText("*Menu bo`limi*");
                 editMessageText.setParseMode("Markdown");
                 editMessageText.setChatId(userid);
@@ -293,15 +320,6 @@ public class Start extends TelegramLongPollingBot {
 
 
     }
-
-
-
-
-
-
-
-
-
 
 
     public static ReplyKeyboard menuKeyboard() {

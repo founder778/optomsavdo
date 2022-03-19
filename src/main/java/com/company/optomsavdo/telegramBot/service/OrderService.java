@@ -80,9 +80,11 @@ public class OrderService {
 
         }
         sendMessage.setChatId(userId);
-//        sendMessage.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Tasdiqlash", "active")))));
-        sendMessage.setText(text + "\n" +
-                "Barchasi tasdiqlandi");
+        sendMessage.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Tasdiqlash", "active")))));
+//        sendMessage.setText(text + "\n" +
+//                "Barchasi tasdiqlandi");
+
+        sendMessage.setText(text);
         orderRepository.update(Integer.parseInt(userId));
         return sendMessage;
 
@@ -116,6 +118,7 @@ public class OrderService {
 
 
         }
+        sendMessage.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Qabul qilish", "tay"+userId)))));
         sendMessage.setChatId("868795543");
         sendMessage.setText(text);
         return sendMessage;

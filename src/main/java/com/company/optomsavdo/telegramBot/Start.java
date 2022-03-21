@@ -341,9 +341,9 @@ public class Start extends TelegramLongPollingBot {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
 
         KeyboardRow firstRow = new KeyboardRow();
-//        String emojitext = EmojiParser.parseToUnicode("📦 zakazlarim");
+        String emojitext = EmojiParser.parseToUnicode("📦 zakazlarim");
         String emojitext1 = EmojiParser.parseToUnicode("📋 zakaz berish");
-//        firstRow.add(new KeyboardButton(emojitext));
+        firstRow.add(new KeyboardButton(emojitext));
         firstRow.add(new KeyboardButton(emojitext1));
 
         KeyboardRow secondRow = new KeyboardRow();

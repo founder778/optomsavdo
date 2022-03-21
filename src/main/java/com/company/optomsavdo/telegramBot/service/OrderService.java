@@ -119,7 +119,7 @@ public class OrderService {
 
         }
         sendMessage.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Qabul qilish", "tay"+userId)))));
-        sendMessage.setChatId("868795543");
+        sendMessage.setChatId("1611125588");
         sendMessage.setText(text);
         return sendMessage;
 

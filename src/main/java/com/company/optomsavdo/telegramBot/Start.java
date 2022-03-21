@@ -7,7 +7,6 @@ import com.company.optomsavdo.telegramBot.service.OrderService;
 import com.company.optomsavdo.telegramBot.service.ProductService;
 import com.company.optomsavdo.telegramBot.service.UserService;
 import com.company.optomsavdo.telegramBot.state.UserState;
-import com.company.repository.ConnectionDB;
 import com.vdurmont.emoji.EmojiParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,6 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -79,11 +77,18 @@ public class Start extends TelegramLongPollingBot {
                     return;
                 }
             }
+//            if(state.get(userId).equals(UserState.worker)  && userService.check(userId)){
+//                sendMessage.setChatId(userId);
+//                sendMessage.setText("siz admin tomonidan bloklandingiz");
+//                sendMes(sendMessage);
+//                return;
+//            }
+
             if(state.containsKey(userId)){
                 if ( state.get(userId).equals(UserState.created)) {
                     sendMes(userController.createUser(userId, message, userStep, newUser));
                     if (userStep.get(userId).equals("/start")) {
-                        sendMessage.setChatId("868795543");
+                        sendMessage.setChatId("1611125588");
                         String[] userSplit = newUser.get(userId).split("#");
                         sendMessage.setText("Ismi" + userSplit[0] + "\n" +
                                 "Yangi agent ish boshlashiga ruhsat berilsinmi");
@@ -165,15 +170,22 @@ public class Start extends TelegramLongPollingBot {
 
 
         } else if (update.hasCallbackQuery()) {
+
             String userid = update.getCallbackQuery().getFrom().getId().toString();
             String data = update.getCallbackQuery().getData();
             String chatId = update.getCallbackQuery().getMessage().getMessageId().toString();
+//            if(state.get(userid).equals(UserState.worker) && userService.check(userid)){
+//                sendMessage.setChatId(userid);
+//                sendMessage.setText("siz admin tomonidan bloklandingiz");
+//                sendMes(sendMessage);
+//                return;
+//            }
           if(data.startsWith("tay")){
               EditMessageText editMessageText1 = new EditMessageText();
               String s = data.substring(3);
               orderRepository.update2(Integer.parseInt(s));
               editMessageText1.setText("Qabul qilindi");
-              editMessageText1.setChatId("868795543");
+              editMessageText1.setChatId("1611125588");
               editMessageText1.setMessageId(Integer.valueOf(chatId));
               editMes(editMessageText1);
               return;
@@ -385,12 +397,12 @@ public class Start extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "";
+        return "t.me/optomsavdo_bot";
     }
 
     @Override
     public String getBotToken() {
-        return "";
+        return "5092177437:AAFNAs8L4_TRefhWx2dY51ejAO7dqrq85IU";
     }
 
 

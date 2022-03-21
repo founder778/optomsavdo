@@ -20,7 +20,7 @@ public interface UserRepository extends CrudRepository<UserEntity,Integer> {
     Integer getuserbyid(String name);
 
 
-    @Query("select u from UserEntity u ")
+    @Query("select u from UserEntity u where u.status = 'ACTIVE' and u.status='BLOCKED'")
     List<UserEntity> getAllUsers();
 
 
@@ -28,6 +28,10 @@ public interface UserRepository extends CrudRepository<UserEntity,Integer> {
     @Transactional
     @Query("update UserEntity o set o.status =?1 where o.a_id=?2")
     void update(String status,Integer userId);
+
+
+    @Query("select u from UserEntity u where u.a_id=?1 and u.status = 'ACTIVE'")
+    UserEntity get(Integer userid);
 
 
 

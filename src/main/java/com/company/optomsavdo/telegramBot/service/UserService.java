@@ -36,13 +36,20 @@ public class UserService {
             return "ok";
         return null;
     }
+    public boolean check(String userId){
+        UserEntity userEntity = userRepository.get(Integer.parseInt(userId));
+        if(userEntity!=null){
+            return false;
+        }
+        return true;
+    }
 
     public SendMessage update(String userId){
         SendMessage sendMessage =new SendMessage();
         Optional<UserEntity> user= userRepository.findById(Integer.parseInt(userId));
         user.get().setStatus(UserStatus.ACTIVE.name());
         userRepository.save(user.get());
-        sendMessage.setChatId("868795543");
+        sendMessage.setChatId("1611125588");
         sendMessage.setText("*Tasdiqlandi*");
         sendMessage.setParseMode("Markdown");
         return sendMessage;

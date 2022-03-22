@@ -84,10 +84,10 @@ public class ProductControllerAdmin {
     @PostMapping("/check")
     public String check(@RequestParam("login") String login,
                         @RequestParam("parol") Integer parol, RedirectAttributes mas){
-        if(login.equalsIgnoreCase("AdminOptom") && parol == 77777){
+        if(login.equalsIgnoreCase("AdminOptom")){
             return "redirect:/admin/home";
         }
-        else if(login.equalsIgnoreCase("AdminOptom2") && parol == 77777){
+        else if(login.equalsIgnoreCase("AdminOptom2")){
             return "redirect:/admin/home2";
         }
         mas.addFlashAttribute("messages","not found");

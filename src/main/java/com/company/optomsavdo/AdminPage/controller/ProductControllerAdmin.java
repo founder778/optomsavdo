@@ -61,9 +61,10 @@ public class ProductControllerAdmin {
 
     @PostMapping("/save")
     public String save(ProductEntity products) {
-        ProductEntity product = productRepository.getProduct(products.getP_name());
+        ProductEntity product = productRepository.getId(products.getP_id());
         product.setP_caption(products.getP_caption());
         product.setP_price(products.getP_price());
+        product.setP_name(products.getP_name());
         productRepository.save(product);
         return "redirect:/admin/products";
     }
@@ -289,9 +290,10 @@ public class ProductControllerAdmin {
     }
     @PostMapping("/save2")
     public String save2(ProductEntity products) {
-        ProductEntity product = productRepository.getProduct(products.getP_name());
+        ProductEntity product = productRepository.getId(products.getP_id());
         product.setP_caption(products.getP_caption());
         product.setP_price(products.getP_price());
+        product.setP_name(products.getP_name());
         productRepository.save(product);
         return "redirect:/admin/products2";
     }

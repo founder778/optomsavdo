@@ -10,7 +10,7 @@
             src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script
             src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.css"></script>
-    <link th:href="@{/style/HomePage.css}" rel="stylesheet">
+    <link th:href="@{/style/homePage.css}" rel="stylesheet">
     <title>Region</title>
 </head>
 <body>
@@ -47,6 +47,10 @@
                 <div class="form-group">
                     <label class="details ">Narxi</label>
                     <input style="height: 30px; width: 200px" type="text" th:field="*{p_price}" required/>
+                </div>
+                <div class="form-group">
+                    <label class="details ">Id</label>
+                    <input style="height: 30px; width: 200px" type="text" th:field="*{p_id}" required/>
                 </div>
 
                 <button style="width: 100px; height: 50px;">

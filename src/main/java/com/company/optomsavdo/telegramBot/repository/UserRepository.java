@@ -20,7 +20,7 @@ public interface UserRepository extends CrudRepository<UserEntity,Integer> {
     Integer getuserbyid(String name);
 
 
-    @Query("select u from UserEntity u where u.status = 'ACTIVE' and u.status='BLOCKED'")
+    @Query("select u from UserEntity u where u.status = 'ACTIVE' or u.status='BLOCKED'")
     List<UserEntity> getAllUsers();
 
 

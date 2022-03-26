@@ -80,7 +80,8 @@ public class OrderService {
 
         }
         sendMessage.setChatId(userId);
-        sendMessage.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Tasdiqlash", "active")))));
+        sendMessage.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Tasdiqlash", "active")),
+                MakeButton.rows(MakeButton.makebutton1("Tozalash", "delete")))));
 //        sendMessage.setText(text + "\n" +
 //                "Barchasi tasdiqlandi");
 

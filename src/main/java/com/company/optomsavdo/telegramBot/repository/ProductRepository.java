@@ -19,6 +19,9 @@ public interface ProductRepository extends CrudRepository<ProductEntity,Integer>
     @Query("select  p from ProductEntity p where p.p_name=?1")
     ProductEntity getProduct(String menu);
 
+    @Query("select  p from ProductEntity p where p.p_id=?1")
+    ProductEntity getId(Integer id);
+
     @Query("select  p.p_name from ProductEntity p where p.p_id=?1")
     String getProductId(Integer id);
 }

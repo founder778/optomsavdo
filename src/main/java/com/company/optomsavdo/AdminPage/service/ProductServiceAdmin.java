@@ -6,6 +6,7 @@ import com.company.optomsavdo.AdminPage.entitys.ProductEntityAdmin;
 import com.company.optomsavdo.AdminPage.repository.MenuRepositoryAdmin;
 import com.company.optomsavdo.AdminPage.repository.ProductRepositoryAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,9 +23,12 @@ public class ProductServiceAdmin {
     ProductRepositoryAdmin productRepository;
     @Autowired
     MenuRepositoryAdmin menuRepository;
+    @Value("${attach.upload.folder}")
+    private String uploadFolder;
+
     public void create(ProductDto product) {
         Optional<MenuEntityAdmin> respons = menuRepository.findByM_name(product.getMenu().toLowerCase());
-        if(!respons.isEmpty()){
+        if (respons.isPresent()) {
             ProductEntityAdmin entity = new ProductEntityAdmin();
             entity.setP_name(product.getP_name().toLowerCase());
             entity.setP_price(product.getP_price());
@@ -35,8 +39,7 @@ public class ProductServiceAdmin {
             entity.setImg(s);
             productRepository.save(entity);
 
-        }
-        else {
+        } else {
             MenuEntityAdmin menu = new MenuEntityAdmin();
             menu.setM_name(product.getMenu().toLowerCase());
             menuRepository.save(menu);
@@ -51,9 +54,10 @@ public class ProductServiceAdmin {
             productRepository.save(entity);
         }
     }
-    public String saveFile(MultipartFile file,String name) {
-        oldDelete( file, name.toLowerCase());
-        File folder = new File("uploads");
+
+    public String saveFile(MultipartFile file, String name) {
+        oldDelete(file, name.toLowerCase());
+        File folder = new File(uploadFolder);
         if (!folder.exists()) {
             folder.mkdir();
         }
@@ -62,7 +66,7 @@ public class ProductServiceAdmin {
             int lastIndex = file.getOriginalFilename().lastIndexOf(".");
             String extension = file.getOriginalFilename().substring(lastIndex + 1);
             byte[] bytes = file.getBytes();
-            Path path = Paths.get("uploads/" + name+"." + extension);
+            Path path = Paths.get(uploadFolder + name + "." + extension);
             Files.write(path, bytes);
             return path.toString();
         } catch (IOException e) {
@@ -70,10 +74,11 @@ public class ProductServiceAdmin {
         }
         return null;
     }
-    public void oldDelete(MultipartFile file,String name){
+
+    public void oldDelete(MultipartFile file, String name) {
         int lastIndex = file.getOriginalFilename().lastIndexOf(".");
         String extension = file.getOriginalFilename().substring(lastIndex + 1);
-        Path path = Paths.get("uploads/" + name+"." + extension);
+        Path path = Paths.get(uploadFolder + name + "." + extension);
         File file1 = path.toFile();
         file1.delete();
     }

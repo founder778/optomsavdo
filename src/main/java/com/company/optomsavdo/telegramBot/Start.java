@@ -84,8 +84,8 @@ public class Start extends TelegramLongPollingBot {
 //                return;
 //            }
 
-            if(state.containsKey(userId)){
-                if ( state.get(userId).equals(UserState.created)) {
+            if (state.containsKey(userId)) {
+                if (state.get(userId).equals(UserState.created)) {
                     sendMes(userController.createUser(userId, message, userStep, newUser));
                     if (userStep.get(userId).equals("/start")) {
                         sendMessage.setChatId("1611125588");
@@ -140,7 +140,7 @@ public class Start extends TelegramLongPollingBot {
 //                }
 
 //            }
-             if ((message.equals("📋 zakaz berish"))) {
+            if ((message.equals("📋 zakaz berish"))) {
                 sendMessage.setText("*Menu bo`limi*");
                 sendMessage.setParseMode("Markdown");
                 sendMessage.setChatId(userId);
@@ -149,14 +149,13 @@ public class Start extends TelegramLongPollingBot {
 
                 sendMes(sendMessage);
                 return;
-            }  if (message.equals("✅ Barchasini tasdiqlash")) {
+            }
+            if (message.equals("✅ Barchasini tasdiqlash")) {
                 if (orderService.create(korzina.get(userId), userId)) {
                     sendMes(orderService.getAllzakazlar(userId));
-                    userStep.replace(userId,"active");
+                    userStep.replace(userId, "active");
 
-                }
-
-                else {
+                } else {
                     sendMessage.setText("Hech narsa zakaz qilinmadi");
                     sendMessage.setChatId(userId);
                     sendMes(sendMessage);
@@ -180,17 +179,17 @@ public class Start extends TelegramLongPollingBot {
 //                sendMes(sendMessage);
 //                return;
 //            }
-          if(data.startsWith("tay")){
-              EditMessageText editMessageText1 = new EditMessageText();
-              String s = data.substring(3);
-              orderRepository.update2(Integer.parseInt(s));
-              editMessageText1.setText("Qabul qilindi");
-              editMessageText1.setChatId("1611125588");
-              editMessageText1.setMessageId(Integer.valueOf(chatId));
-              editMes(editMessageText1);
-              return;
+            if (data.startsWith("tay")) {
+                EditMessageText editMessageText1 = new EditMessageText();
+                String s = data.substring(3);
+                orderRepository.update2(Integer.parseInt(s));
+                editMessageText1.setText("Qabul qilindi");
+                editMessageText1.setChatId("1611125588");
+                editMessageText1.setMessageId(Integer.valueOf(chatId));
+                editMes(editMessageText1);
+                return;
 
-          }
+            }
             if (data.startsWith("Ruxsat")) {
                 sendMes(userService.update(data.substring(6)));
                 return;
@@ -232,7 +231,7 @@ public class Start extends TelegramLongPollingBot {
                 return;
 
             }
-            if(userStep.get(userid).equals("active") && data.equals("active")){
+            if (userStep.get(userid).equals("active") && data.equals("active")) {
                 sendMes(orderService.retunAdmin(userid));
                 EditMessageText sendMessage1 = new EditMessageText();
                 sendMessage1.setChatId(userid);
@@ -303,15 +302,15 @@ public class Start extends TelegramLongPollingBot {
 
             }
 
-//            if (userStep.get(userid).equals("ok") && data.equals("delete")) {
-//                korzina.remove(userid);
-//                editMessageText.setText("*tozalandi ❌*");
-//                editMessageText.setParseMode("Markdown");
-//                editMessageText.setChatId(userid);
-//                editMessageText.setMessageId(Integer.valueOf(chatId));
-//                editMes(editMessageText);
-//                return;
-//            }
+            if (userStep.get(userid).equals("active") && data.equals("delete")) {
+                korzina.remove(userid);
+                editMessageText.setText("*tozalandi ❌*");
+                editMessageText.setParseMode("Markdown");
+                editMessageText.setChatId(userid);
+                editMessageText.setMessageId(Integer.valueOf(chatId));
+                editMes(editMessageText);
+                return;
+            }
 
             if (userStep.get(userid).equals("istoriya")) {
                 editMes(orderService.retunByDate(data, userStep, userid, chatId));

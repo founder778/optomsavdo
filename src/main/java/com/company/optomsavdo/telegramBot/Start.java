@@ -396,12 +396,12 @@ public class Start extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "t.me/optomsavdo_bot";
+        return "";
     }
 
     @Override
     public String getBotToken() {
-        return "5092177437:AAFNAs8L4_TRefhWx2dY51ejAO7dqrq85IU";
+        return "";
     }
 
 

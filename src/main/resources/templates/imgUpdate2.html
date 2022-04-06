@@ -11,7 +11,7 @@
     <script
             src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.css"></script>
     <link th:href="@{/style/homePage.css}" rel="stylesheet" >
-    <title>Region</title>
+    <title>OptomSavdo</title>
 </head>
 <body>
 <header>
@@ -37,9 +37,9 @@
 
             <form th:action="@{/admin/img2}" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label style="color: azure">photo</label>
-                    <input type="file"
-                           class="form-control" name="photo" placeholder="enter photo">
+                    <label style="color: azure">photo token</label>
+                    <input type="text"
+                           class="form-control" name="photo" placeholder="enter photo" required/>
                 </div>
                 <div class="form-group">
                     <label style="color: azure">name</label>

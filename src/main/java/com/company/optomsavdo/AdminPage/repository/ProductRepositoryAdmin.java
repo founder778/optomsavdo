@@ -21,6 +21,9 @@ public interface ProductRepositoryAdmin extends CrudRepository<ProductEntityAdmi
     @Query("select t from ProductEntityAdmin t")
     List<ProductEntityAdmin> AllProducts();
 
+    @Query("select t from ProductEntityAdmin t where t.p_name=?1")
+    ProductEntityAdmin getByName(String name);
+
     @Modifying
     @Transactional
     @Query(" delete  from ProductEntityAdmin  a  where a.p_name=?1 ")

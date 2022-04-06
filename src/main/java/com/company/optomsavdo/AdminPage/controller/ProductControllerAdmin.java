@@ -41,14 +41,14 @@ public class ProductControllerAdmin {
     ProductRepository productRepository;
 
     @PostMapping("/upload")
-    public String fileUpload(@RequestParam("photo") MultipartFile photo,
+    public String fileUpload(@RequestParam("photo") String photoToken,
                              @RequestParam("name") String name,
                              @RequestParam("menu") String menu,
                              @RequestParam("type") String type,
                              @RequestParam("price") String price,
                              @RequestParam("caption") String caption) {
         ProductDto product = new ProductDto();
-        product.setImg(photo);
+        product.setImg(photoToken);
         product.setP_name(name);
         product.setMenu(menu);
         product.setP_type(type);
@@ -70,10 +70,10 @@ public class ProductControllerAdmin {
     }
 
     @PostMapping("/img")
-    public String ImgUpdate(@RequestParam("photo") MultipartFile photo,
+    public String ImgUpdate(@RequestParam("photo") String photo,
                             @RequestParam("name") String name) {
 
-        productService.saveFile(photo, name.toLowerCase());
+        productService.update(photo, name.toLowerCase());
         return "redirect:/admin/home";
     }
 
@@ -243,10 +243,10 @@ public class ProductControllerAdmin {
     }
 
     @PostMapping("/img2")
-    public String ImgUpdate2(@RequestParam("photo") MultipartFile photo,
+    public String ImgUpdate2(@RequestParam("photo") String photo,
                             @RequestParam("name") String name) {
 
-        productService.saveFile(photo, name.toLowerCase());
+        productService.update(photo, name.toLowerCase());
         return "redirect:/admin/home2";
     }
 
@@ -258,7 +258,7 @@ public class ProductControllerAdmin {
     }
 
     @PostMapping("/upload2")
-    public String fileUpload2(@RequestParam("photo") MultipartFile photo,
+    public String fileUpload2(@RequestParam("photo") String photo,
                              @RequestParam("name") String name,
                              @RequestParam("menu") String menu,
                              @RequestParam("type") String type,

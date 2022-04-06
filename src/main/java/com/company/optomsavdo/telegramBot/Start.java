@@ -15,6 +15,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -55,8 +57,21 @@ public class Start extends TelegramLongPollingBot {
         EditMessageText editMessageText = new EditMessageText();
 
         if (update.hasMessage()) {
+
+            Message messageObj = update.getMessage();
+            if (messageObj.hasPhoto()) {
+                List<PhotoSize> photoList = messageObj.getPhoto();
+                PhotoSize photo =  photoList.get(photoList.size() - 1);
+                String fileId = photo.getFileId();
+                SendMessage photoInfoMessage = new SendMessage();
+                photoInfoMessage.setText("FileId: \n"+ fileId);
+                photoInfoMessage.setChatId(messageObj.getChatId().toString());
+                sendMes(photoInfoMessage);
+                return;
+            }
             String userId = update.getMessage().getChatId().toString();
             String message = update.getMessage().getText();
+
             switch (message) {
                 case "/start": {
                     if (userService.isExistUser(userId) != null) {
@@ -90,7 +105,7 @@ public class Start extends TelegramLongPollingBot {
                     if (userStep.get(userId).equals("/start")) {
                         sendMessage.setChatId("1611125588");
                         String[] userSplit = newUser.get(userId).split("#");
-                        sendMessage.setText("Ismi" + userSplit[0] + "\n" +
+                        sendMessage.setText("Ismi" + userSplit[0] + "    \n\n" +
                                 "Yangi agent ish boshlashiga ruhsat berilsinmi");
                         sendMessage.setReplyMarkup(MakeButton.readybutton(MakeButton.collection(MakeButton.rows(MakeButton.makebutton1("Ruxsat berish", "Ruxsat" + userId)))));
                         newUser.replace(userId, "admin");
@@ -340,9 +355,9 @@ public class Start extends TelegramLongPollingBot {
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
 
         KeyboardRow firstRow = new KeyboardRow();
-        String emojitext = EmojiParser.parseToUnicode("📦 zakazlarim");
+//        String emojitext = EmojiParser.parseToUnicode("📦 zakazlarim");
         String emojitext1 = EmojiParser.parseToUnicode("📋 zakaz berish");
-        firstRow.add(new KeyboardButton(emojitext));
+//        firstRow.add(new KeyboardButton(emojitext));
         firstRow.add(new KeyboardButton(emojitext1));
 
         KeyboardRow secondRow = new KeyboardRow();
@@ -395,13 +410,19 @@ public class Start extends TelegramLongPollingBot {
 
 
     @Override
+//    public String getBotUsername() {
+//        return "optomsavdo_bot";
+//    }
     public String getBotUsername() {
-        return "";
+        return "chinorexpress_bot:";
     }
 
     @Override
+//    public String getBotToken() {
+//        return "5092177437:AAFNAs8L4_TRefhWx2dY51ejAO7dqrq85IU";
+//    }
     public String getBotToken() {
-        return "";
+        return "5043212360:AAFCJKLqcQkPfvFRqOtq3r32ei_tvWmRUfc";
     }
 
 

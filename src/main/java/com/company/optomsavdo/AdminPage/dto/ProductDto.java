@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ProductDto {
-    private MultipartFile img;
+    private String img;
     private Integer p_id;
     private String p_name;
     private String p_caption;

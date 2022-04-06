@@ -23,8 +23,8 @@ public class ProductServiceAdmin {
     ProductRepositoryAdmin productRepository;
     @Autowired
     MenuRepositoryAdmin menuRepository;
-    @Value("${attach.upload.folder}")
-    private String uploadFolder;
+//    @Value("${attach.upload.folder}")
+//    private String uploadFolder;
 
     public void create(ProductDto product) {
         Optional<MenuEntityAdmin> respons = menuRepository.findByM_name(product.getMenu().toLowerCase());
@@ -35,8 +35,8 @@ public class ProductServiceAdmin {
             entity.setMenu(respons.get());
             entity.setP_caption(product.getP_caption());
             entity.setP_type(product.getP_type().toLowerCase());
-            String s = saveFile(product.getImg(), product.getP_name());
-            entity.setImg(s);
+
+            entity.setImg(product.getImg());
             productRepository.save(entity);
 
         } else {
@@ -49,39 +49,50 @@ public class ProductServiceAdmin {
             entity.setMenu(menu);
             entity.setP_caption(product.getP_caption());
             entity.setP_type(product.getP_type().toLowerCase());
-            String s = saveFile(product.getImg(), product.getP_name());
-            entity.setImg(s);
+            entity.setImg(product.getImg());
             productRepository.save(entity);
         }
     }
 
-    public String saveFile(MultipartFile file, String name) {
-        oldDelete(file, name.toLowerCase());
-        File folder = new File(uploadFolder);
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
+    public void update(String photo, String name) {
+        ProductEntityAdmin response = productRepository.getByName(name);
+        response.setImg(photo);
+        productRepository.save(response);
 
-        try {
-            int lastIndex = file.getOriginalFilename().lastIndexOf(".");
-            String extension = file.getOriginalFilename().substring(lastIndex + 1);
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(uploadFolder + name + "." + extension);
-            Files.write(path, bytes);
-            return path.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
-    public void oldDelete(MultipartFile file, String name) {
-        int lastIndex = file.getOriginalFilename().lastIndexOf(".");
-        String extension = file.getOriginalFilename().substring(lastIndex + 1);
-        Path path = Paths.get(uploadFolder + name + "." + extension);
-        File file1 = path.toFile();
-        file1.delete();
-    }
+//    public String saveFile(MultipartFile file, String name) {
+//        oldDelete(file, name.toLowerCase());
+//        File folder = new File("upload");
+//        if (!folder.exists()) {
+//            folder.mkdir();
+//        }
+//
+//        try {
+//            int lastIndex = file.getOriginalFilename().lastIndexOf(".");
+//            String extension = file.getOriginalFilename().substring(lastIndex + 1);
+//            byte[] bytes = file.getBytes();
+//            Path path = Paths.get("upload/" + name + "." + extension);
+//            Files.write(path, bytes);
+//            return path.toString();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+//
+//    public void oldDelete(MultipartFile file, String name) {
+//        int lastIndex = file.getOriginalFilename().lastIndexOf(".");
+//        String extension = file.getOriginalFilename().substring(lastIndex + 1);
+//        Path path = Paths.get("upload/" + name + "." + extension);
+//        File file1 = path.toFile();
+//        file1.delete();
+//    }
+//    public void delete(String name) {
+//        Path path = Paths.get("upload/" + name + ".jpg");
+//        File file1 = path.toFile();
+//        file1.delete();
+//    }
 
 
 }

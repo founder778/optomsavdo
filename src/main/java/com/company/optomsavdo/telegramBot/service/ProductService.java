@@ -4,6 +4,7 @@ import com.company.optomsavdo.telegramBot.entity.ProductEntity;
 import com.company.optomsavdo.telegramBot.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
@@ -90,10 +91,11 @@ public class ProductService {
         userStep.replace(userId, "zakaz");
         for (ProductEntity product : products) {
             SendPhoto sendPhoto = new SendPhoto();
-            InputFile inputFile = new InputFile(new File(product.getImg()));
+            InputFile inputFile = new InputFile(product.getImg());
+//            InputFile inputFile = new InputFile(new File(product.getImg()));
             sendPhoto.setCaption("name : " + product.getP_name() + "\n" +
                     "narx : " + product.getP_price() + "\n" +
-                    "" + product.getP_caption());
+                    "Mahsulot xaqida : " + product.getP_caption());
             InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup();
             InlineKeyboardButton inlineKeyboardButton = MakeButton.makebutton1("0", "count");
             InlineKeyboardButton inlineKeyboardButton1 = MakeButton.makebutton1("-", "minus_" + product.getP_name());
@@ -114,8 +116,9 @@ public class ProductService {
             keyboardRowList.add(secondRow);
             keyboard.setKeyboard(keyboardRowList);
             sendPhoto.setReplyMarkup(keyboard);
-
             sendPhoto.setPhoto(inputFile);
+//            GetFile file = new GetFile("ddfsdfsd");
+//            org.telegram.telegrambots.meta.api.objects.File f = ;
             sendPhoto.setChatId(userId);
             photos.add(sendPhoto);
         }

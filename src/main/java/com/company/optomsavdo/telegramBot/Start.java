@@ -410,17 +410,13 @@ public class Start extends TelegramLongPollingBot {
 
 
     @Override
-//    public String getBotUsername() {
-//        return "optomsavdo_bot";
-//    }
+
     public String getBotUsername() {
         return "chinorexpress_bot:";
     }
 
     @Override
-//    public String getBotToken() {
-//        return "5092177437:AAFNAs8L4_TRefhWx2dY51ejAO7dqrq85IU";
-//    }
+
     public String getBotToken() {
         return "5043212360:AAFCJKLqcQkPfvFRqOtq3r32ei_tvWmRUfc";
     }

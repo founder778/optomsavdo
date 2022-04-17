@@ -9,12 +9,14 @@ import com.company.optomsavdo.telegramBot.service.UserService;
 import com.company.optomsavdo.telegramBot.state.UserState;
 import com.vdurmont.emoji.EmojiParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -36,6 +38,7 @@ public class Start extends TelegramLongPollingBot {
     Map<String, String> korzina = new HashMap<>();
     Map<String, String> oldStep = new HashMap<>();
     Map<String, String> olddata = new HashMap<>();
+    Map<String, String> logInn = new HashMap<>();
 
     @Autowired
     UserController userController;
@@ -50,9 +53,73 @@ public class Start extends TelegramLongPollingBot {
     OrderService orderService;
     @Autowired
     OrderRepository orderRepository;
-
     @Override
     public void onUpdateReceived(Update update) {
+
+//        SendPhoto sendPhoto1 = new SendPhoto();
+//        sendPhoto1.setChatId(update.getMessage().getChatId().toString());
+////        sendPhoto1.setCaption("*✅ O'z biznesiga asos solmoqchi bo'lganlar uchun:\n" +
+////                "\n" +
+////                "\uD83D\uDCCC Respublikamizning istalgan viloyat, tuman va " +
+////                " shahridan uydan chiqmagan holda ortiqcha vaqt va naqt sarflamasdan " +
+////                "kop yillardan buyon xalq xizmatida bolib kelayotgan va oz sohasining " +
+////                "mutaxassisi bolgan xodimlarni yigaolgan \"SINCE INNOVATION SERVICE\" " +
+////                "MChJ yordamida 2 soat vaqt oraligida oz biznes yoki oquv markazingizga asos soling.\n" +
+////                "\n" +
+////                "\uD83D\uDD0E Bizning mutaxassislar Sizga qulaylik yaratish maqsadida ushbu " +
+////                "xizmatlarni taklif etadi, bular:\n" +
+////                "1⃣ biznes va/yoki markazni tashkil etish uchun qulay joy tanlash;\n" +
+////                "2⃣ biznes va/yoki oquv markaziga nom tanlash;\n" +
+////                "3⃣ hujjatlarni rasmiylashtirish;\n" +
+////                "4⃣ tegishli fanlardan ( sotuv ishlari boyicha boyicha menedjer, muzokaralar olib " +
+////                "borish boyicha menedjer, ish yuritish, marketolog, direktor yordamchisi va direktor) " +
+////                "oz bazamizda mavjud mutaxassis kadrlarni tanlash;\n" +
+////                "5⃣ maqsadli reklama; \n" +
+////                "6⃣ biznes va/yoki oquv markazi daromadini doimoy kotarib borish boyicha 1 yillik " +
+////                "( 4 kvartalga alohida - alohida ) ishlangan strategiya bilan taminlash;\n" +
+////                "7⃣ 6 oylik bepul kansultatsiya;\n" +
+////                "\n" +
+////                "\uD83D\uDFE2 Kompaniyamiz bilan hamkorlik qilishning afzallik tomonlari:\n" +
+////                "\n" +
+////                "\uD83D\uDD39 mijozimiz kopligi sabab arzon narxlar;\n" +
+////                "\uD83D\uDD39tajriba va bilimli xodimlar ishni togri tashkillashtirishi " +
+////                "natijasida Sizni qiziqtirgan savollarga qimmatli vaqtingizni tejagan holda " +
+////                "qisqa muddatda aniq va ishonchli malumotga ega bolasiz;\n" +
+////                "\uD83D\uDD39 zarurat tufayli mijozlarimiz kompaniyamiz ofesiga kelib ketishlari" +
+////                " uchun qulay joylashuv;\n" +
+////                "\uD83D\uDD39 mijozlar ozaro tajriba almashishlari uchun zamin yaratish maqsadida " +
+////                "kompaniyamiz ananasiga aylanib borayotgan yiliga ikki marotaba " +
+////                "tashkil etiladigan banket marosimi;\n" +
+////                "\n" +
+////                "\uD83C\uDD95 Kompaniyamizning qoshimcha xizmatlari haqidagi malumotni" +
+////                " olish uchun: prosta_biznes\n" +
+////                "\n" +
+////                "\uD83D\uDCDD Yuqoridagi xizmatlarning barchasi Siz bilan kompaniyamiz o'rtasida" +
+////                " ikki tomonlama shartnoma imzolanib, unda korsatilgan talablar bajarilganidan song amalga oshiriladi.\n" +
+////                "\n" +
+////                "\uD83E\uDD1D Kompaniyamiz xodimlari Siz bilan ozaro manfaatli shartnoma" +
+////                " imzolashdan va bizga bildirilgan ishonchdan mamnunligini bildiradi.\n" +
+////                "\n" +
+////                "♻️ Firma ochish; o'quv markazi ochish; IT dasturlash yo'nalishi" +
+////                " bo'yicha istalgan qiyinchilikda buyurtmalar qabuli.\n" +
+////                "\n" +
+////                "\uD83C\uDFE2 Bizning ofesimiz: Mirzo Ulug'bek tumani, Olimlar shaharchasi 64 B.\n" +
+////                "\n" +
+////                "Biz bilan boglanish va kanalga azo bolish:\n" +
+////                "\uD83D\uDCE9 eto_prosta_biznes\n" +
+////                "\n" +
+////                "☎️ +99897 766 09 77*");
+//        sendPhoto1.setCaption("dasda");
+//        InputFile inputFile = new InputFile("a.jpg");
+//        sendPhoto1.setParseMode("Markdown");
+//        sendPhoto1.setPhoto(inputFile);
+//        try {
+//            execute(sendPhoto1);
+//            return;
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
+
         SendMessage sendMessage = new SendMessage();
         EditMessageText editMessageText = new EditMessageText();
 
@@ -61,10 +128,10 @@ public class Start extends TelegramLongPollingBot {
             Message messageObj = update.getMessage();
             if (messageObj.hasPhoto()) {
                 List<PhotoSize> photoList = messageObj.getPhoto();
-                PhotoSize photo =  photoList.get(photoList.size() - 1);
+                PhotoSize photo = photoList.get(photoList.size() - 1);
                 String fileId = photo.getFileId();
                 SendMessage photoInfoMessage = new SendMessage();
-                photoInfoMessage.setText("FileId: \n"+ fileId);
+                photoInfoMessage.setText("FileId: \n" + fileId);
                 photoInfoMessage.setChatId(messageObj.getChatId().toString());
                 sendMes(photoInfoMessage);
                 return;
@@ -113,6 +180,11 @@ public class Start extends TelegramLongPollingBot {
                     }
                     return;
                 } else if (state.get(userId).equals(UserState.worker)) {
+//                    if(logInn.containsKey(userId)){
+//                        logInn.replace(userId,message);
+//                    }else {
+//                        logInn.put(userId,message);
+//                    }
                     sendMes(userController.isExistUser(message, userId, userStep, signUp, state));
 
                     return;
@@ -256,43 +328,6 @@ public class Start extends TelegramLongPollingBot {
                 korzina.remove(userid);
                 return;
             }
-//            if (userStep.get(userid).equals("zakaz") && data.startsWith("ok")) {
-//
-//
-//                String[] split = data.split("/");
-//                if (!korzina.containsKey(userid)) {
-//                    korzina.put(userid, split[1] + "/" + split[2]);
-//                    sendMessage.setParseMode("Markdown");
-//                    sendMessage.setText(  split[1]+" dan " +split[2] +" yashik "+ "*zakaz tasdiqlandi ✅*");
-//
-//                    sendMessage.setChatId(userid);
-//                    productCount.replace(userid, 0);
-//                    System.out.println(korzina.toString());
-//                    sendMes(sendMessage);
-//                    if(!productCount.containsKey(userid)){
-//                        productCount.put(userid,0);
-//                    }else {
-//                        productCount.replace(userid,0);
-//                    }
-////                    replayM(productService.zeroCount(productCount, userid, chatId, data));
-//                    return;
-//                }
-//                korzina.replace(userid, korzina.get(userid) + "=" + split[1] + "/" + split[2]);
-//                sendMessage.setText(split[1]+" dan " +split[2] +" yashik "+ "*zakaz tasdiqlandi ✅*");
-//                sendMessage.setParseMode("Markdown");
-//                sendMessage.setChatId(userid);
-//                productCount.replace(userid, 0);
-//                sendMes(sendMessage);
-//                if(!productCount.containsKey(userid)){
-//                    productCount.put(userid,0);
-//                }else {
-//                    productCount.replace(userid,0);
-//                }
-////                replayM(productService.zeroCount(productCount, userid, chatId, data));
-//                return;
-//
-//            }
-
 
             if (userStep.get(userid).equals("zakaz") && data.startsWith("ok")) {
                 EditMessageReplyMarkup replyMarkup = new EditMessageReplyMarkup();

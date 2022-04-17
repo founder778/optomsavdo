@@ -34,5 +34,9 @@ public interface UserRepository extends CrudRepository<UserEntity,Integer> {
     UserEntity get(Integer userid);
 
 
+    @Query("select u from UserEntity u  where u.a_login=?1 and u.a_password=?2 and u.status= 'ACTIVE'")
+    UserEntity check(String login,String parol);
+
+
 
 }
